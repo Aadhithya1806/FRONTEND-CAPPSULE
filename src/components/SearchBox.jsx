@@ -3,7 +3,6 @@ import { useState } from "react";
 // import SearchIcon from "@mui/icons-material/Search";
 const SearchBox = ({ handleFilter, onClick, isSearching }) => {
     const [searchValue, setSearchValue] = useState("");
-    4;
 
     return (
         <div className="search-box w-3/5 mx-auto my-2 flex border rounded-full ">

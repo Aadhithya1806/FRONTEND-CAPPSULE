@@ -6,6 +6,7 @@ function App() {
     const [searchValue, setSearchValue] = useState("");
     const [saltSuggestions, setSaltSuggestions] = useState([]);
     const [filterData, setFilterData] = useState([]);
+    // Getting data From backend using the fetch api call
     useEffect(() => {
         fetch(
             "https://backend.cappsule.co.in/api/v1/new_search?q=paracetamol&pharmacyIds=1,2,3"
@@ -18,7 +19,7 @@ function App() {
                 setSaltSuggestions(data.data.saltSuggestions);
             });
     }, []);
-
+    //Filtering of necessary datas for search
     const handleFilter = (value) => {
         const res = saltSuggestions.filter((item) =>
             item.salt.split("+")[0].toLowerCase().includes(value)
@@ -30,9 +31,9 @@ function App() {
             setFilterData([]);
         }
     };
-    console.log(searchValue, "SEARXH");
-    console.log("ACTUAL ", saltSuggestions);
-    console.log("FILTERED", filterData);
+    // console.log(searchValue, "SEARXH");
+    // console.log("ACTUAL ", saltSuggestions);
+    // console.log("FILTERED", filterData);
     // console.log(medicineSuggestions);
     return (
         <div className="bg-white">

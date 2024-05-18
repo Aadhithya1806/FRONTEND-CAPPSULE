@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Card from "./Card";
 
 const DisplayInfoCard = ({ salt }) => {
+    // All Datas of Forms strength and packing
     const saltFormsList = Object.keys(salt.salt_forms_json);
     const saltStrengthList = Object.keys(
         salt.salt_forms_json[saltFormsList[0]]
@@ -9,7 +10,7 @@ const DisplayInfoCard = ({ salt }) => {
     const saltPackingList = Object.keys(
         salt.salt_forms_json[saltFormsList[0]][saltStrengthList[0]]
     );
-
+    //Selected Buttons//
     const [selectedSalt, setSelectedSalt] = useState({
         form: saltFormsList[0],
         strength: saltStrengthList[0],
@@ -24,12 +25,12 @@ const DisplayInfoCard = ({ salt }) => {
     const [showAllForms, setShowAllForms] = useState(false);
     const [showAllStrengths, setShowAllStrengths] = useState(false);
     const [showAllPackings, setShowAllPackings] = useState(false);
-
+    //Check and update the Availability
     const updateAvailability = (form, strength, packing) => {
         const pharmacies = salt.salt_forms_json[form][strength][packing];
         let available = false;
         let lowestPrice = null;
-
+        // Getting the lowest pharmacy price first
         for (const pharmacyId in pharmacies) {
             const pharmacy = pharmacies[pharmacyId];
             if (pharmacy !== null) {
@@ -50,7 +51,7 @@ const DisplayInfoCard = ({ salt }) => {
             lowestPrice,
         });
     };
-
+    // updating availability for every change in the selected salt
     useEffect(() => {
         updateAvailability(
             selectedSalt.form,
@@ -58,7 +59,7 @@ const DisplayInfoCard = ({ salt }) => {
             selectedSalt.packing
         );
     }, [selectedSalt]);
-
+    // All Functions to handle the selected Stuffs
     const formHandler = (form) => {
         const newStrengthList = Object.keys(salt.salt_forms_json[form]);
         const newPackingList = Object.keys(
@@ -92,6 +93,7 @@ const DisplayInfoCard = ({ salt }) => {
         updateAvailability(selectedSalt.form, selectedSalt.strength, packing);
     };
 
+    // different classses for different availabiliies or unavailabilites
     const selectedClass =
         "px-3 py-1 text-sm font-semibold border-2 border-darkBlue rounded m-1 shadow-buttonShadow";
     const notSelectedClass =
@@ -172,17 +174,18 @@ const DisplayInfoCard = ({ salt }) => {
                                       ))
                                 : null
                         )}
-                        {Object.keys(salt.salt_forms_json[selectedSalt.form])
-                            .length > 4 && (
-                            <p
-                                onClick={() =>
-                                    setShowAllStrengths(!showAllStrengths)
-                                }
-                                className="more-less text-darkBlue font-semibold ml-1"
-                            >
-                                {showAllStrengths ? "Less..." : "More..."}
-                            </p>
-                        )}
+                        {salt.salt_forms_json[selectedSalt.form] &&
+                            Object.keys(salt.salt_forms_json[selectedSalt.form])
+                                .length > 4 && (
+                                <p
+                                    onClick={() =>
+                                        setShowAllStrengths(!showAllStrengths)
+                                    }
+                                    className="more-less text-darkBlue font-semibold ml-1"
+                                >
+                                    {showAllStrengths ? "Less..." : "More..."}
+                                </p>
+                            )}
                     </div>
                 </div>
                 <div className="flex">
@@ -222,11 +225,11 @@ const DisplayInfoCard = ({ salt }) => {
                                                                 selectedSalt.packing ===
                                                                 packing
                                                                     ? availability.isAvailable
-                                                                        ? selectedClass // 1. available and matching
-                                                                        : unavailableSelected // 2. not available but matching
+                                                                        ? selectedClass // available and matching
+                                                                        : unavailableSelected //not available but matching
                                                                     : availability.isAvailable
-                                                                    ? notSelectedClass // 4. available and not matching
-                                                                    : unavailableNotSelected // 3. not available and not matching
+                                                                    ? notSelectedClass //  available and not matching
+                                                                    : unavailableNotSelected // not available and not matching
                                                             }
                                                             key={packing}
                                                         >
@@ -237,25 +240,32 @@ const DisplayInfoCard = ({ salt }) => {
                                   )
                                 : null
                         )}
-                        {Object.keys(
-                            salt.salt_forms_json[selectedSalt.form][
-                                selectedSalt.strength
-                            ]
-                        ).length > 4 && (
-                            <p
-                                onClick={() =>
-                                    setShowAllPackings(!showAllPackings)
-                                }
-                                className="more-less text-darkBlue font-semibold ml-1"
-                            >
-                                {showAllPackings ? "Less..." : "More..."}
-                            </p>
-                        )}
+                        {salt.salt_forms_json[selectedSalt.form][
+                            selectedSalt.strength
+                        ] &&
+                            Object.keys(
+                                salt.salt_forms_json[selectedSalt.form][
+                                    selectedSalt.strength
+                                ]
+                            ).length > 4 && (
+                                <p
+                                    onClick={() =>
+                                        setShowAllPackings(!showAllPackings)
+                                    }
+                                    className="more-less text-darkBlue font-semibold ml-1"
+                                >
+                                    {showAllPackings ? "Less..." : "More..."}
+                                </p>
+                            )}
                     </div>
                 </div>
             </div>
             <div className="flex flex-col justify-center w-full md:w-1/2 lg:w-1/3 mx-auto align-middle p-2">
                 <p className="self-center text-salt font-semibold text-lg">
+                    {/* Here I am spliting the value of salt name by'+' to make it
+                    simple and precise we can also continue without the splitin
+                    if in case we want both the name */}
+
                     {salt.salt.split("+")[0]}
                 </p>
                 <p className="self-center text-darkBlue text-sm font-medium">
